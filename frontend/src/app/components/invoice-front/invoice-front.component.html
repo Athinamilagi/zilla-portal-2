@@ -1,0 +1,88 @@
+<div class="invoice-container">
+  <button class="back-btn" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i>
+    Back
+  </button>
+  <div class="header">
+    <h2>Front Office Invoices</h2>
+    <button (click)="loadInvoices()" [disabled]="loading">
+      <i class="fas fa-sync-alt"></i>
+      Refresh
+    </button>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+    Loading...
+  </div>
+
+  <div class="invoice-list" *ngIf="!loading && !error">
+    <div class="invoice-card" *ngFor="let invoice of invoices"
+      (click)="navigateToInvoiceBack(invoice.Belnr, invoice.Lifnr)" style="cursor: pointer;">
+      <div class="invoice-header">
+        <h3>Invoice #{{ invoice.Belnr }}</h3>
+        <span class="status" [ngClass]="invoice.Blart.toLowerCase()">{{ invoice.Blart }}</span>
+      </div>
+      <div class="invoice-details">
+        <p><strong>Document Date:</strong> {{ formatDate(invoice.Bldat) }}</p>
+        <p><strong>Posting Date:</strong> {{ formatDate(invoice.Budat) || 'Not Posted' }}</p>
+        <p><strong>Due Date:</strong> {{ formatDate(invoice.Zfbdt) }}</p>
+        <p><strong>Amount:</strong> {{ invoice.Waers }} {{ invoice.Rmwwr | number:'1.2-2' }}</p>
+        <p><strong>Tax Amount:</strong> {{ invoice.Waers }} {{ invoice.Wmwst1 | number:'1.2-2' }}</p>
+        <p><strong>Fiscal Year:</strong> {{ invoice.Gjahr }}</p>
+        <p><strong>Vendor ID:</strong> {{ invoice.Lifnr }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="!loading && !error && (!invoices || invoices.length === 0)">
+    <p>No invoices available.</p>
+  </div>
+
+  <div class="invoice-detail-modal" *ngIf="selectedInvoice">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Invoice Details #{{ selectedInvoice.id }}</h3>
+        <button class="close-button" (click)="closeInvoiceDetails()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-section">
+          <h4>General Information</h4>
+          <p><strong>Status:</strong> {{ selectedInvoice.status }}</p>
+          <p><strong>Date:</strong> {{ selectedInvoice.date | date }}</p>
+          <p><strong>Due Date:</strong> {{ selectedInvoice.dueDate | date }}</p>
+          <p><strong>Amount:</strong> {{ selectedInvoice.amount | currency }}</p>
+          <p><strong>PO Reference:</strong> {{ selectedInvoice.poReference }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h4>Items</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of selectedInvoice.items">
+                <td>{{ item.code }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unitPrice | currency }}</td>
+                <td>{{ item.total | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

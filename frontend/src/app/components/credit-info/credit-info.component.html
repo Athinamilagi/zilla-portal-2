@@ -1,0 +1,59 @@
+<div class="credit-info-container">
+  <button class="back-btn" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i>
+    Back
+  </button>
+  <div class="header">
+    <h1>Credit Information</h1>
+    <button class="refresh-button" (click)="loadCreditInfo()">
+      <i class="fas fa-sync-alt"></i>
+      Refresh
+    </button>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
+  <!-- Debug information -->
+  <div class="debug-info" *ngIf="!loading && !error">
+    <p>Number of records: {{ creditInfo.length }}</p>
+  </div>
+
+  <div class="credit-info-content" *ngIf="!loading && !error && creditInfo && creditInfo.length > 0">
+    <!-- Transaction History -->
+    <div class="transaction-history">
+      <h2>Transaction History</h2>
+      <div class="history-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Entry Date</th>
+              <th>Posting Date</th>
+              <th>Memo Doc</th>
+              <th>Amount</th>
+              <th>Document Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of creditInfo; let i = index">
+              <td>{{ formatDate(transaction.EntryDate) }}</td>
+              <td>{{ formatDate(transaction.PostingDate) }}</td>
+              <td>{{ transaction.MemoDoc }}</td>
+              <td>{{ transaction.Currency }} {{ transaction.Amount | number:'1.2-2' }}</td>
+              <td>{{ transaction.DocType }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="!loading && !error && (!creditInfo || creditInfo.length === 0)">
+    <p>No credit information available.</p>
+  </div>
+</div> 

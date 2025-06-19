@@ -1,0 +1,81 @@
+<div class="rfq-container">
+  <button class="back-btn" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i>
+    Back
+  </button>
+  <div class="header">
+    <h2>Request for Quotes (RFQs)</h2>
+    <button (click)="loadRFQs()" [disabled]="loading">Refresh</button>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    Loading...
+  </div>
+
+  <div class="rfq-list" *ngIf="!loading && !error">
+    <div class="rfq-card" *ngFor="let rfq of rfqs" (click)="viewRFQDetails(rfq.RfqId)">
+      <div class="rfq-header">
+        <h3>RFQ #{{ rfq.RfqId }}</h3>
+        <span class="status" [ngClass]="rfq.status?.toLowerCase()">{{ rfq.status }}</span>
+      </div>
+      <div class="rfq-details">
+        <p><strong>Date:</strong> {{ parseSapDate(rfq.DocDate) }}</p>
+        <p><strong>Description:</strong> {{ rfq.Description }}</p>
+        <p><strong>Material:</strong> {{ rfq.Material }}</p>
+        <p><strong>Quantity:</strong> {{ rfq.Quantity }} {{ rfq.Unit }}</p>
+        <p><strong>Due Date:</strong> {{ parseSapDate(rfq.DeliveryDate) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rfq-detail-modal" *ngIf="selectedRFQ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>RFQ Details #{{ selectedRFQ.id }}</h3>
+        <button class="close-button" (click)="closeRFQDetails()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-section">
+          <h4>General Information</h4>
+          <p><strong>Status:</strong> {{ selectedRFQ.status }}</p>
+          <p><strong>Date:</strong> {{ parseSapDate(selectedRFQ.DocDate) }}</p>
+          <p><strong>Due Date:</strong> {{ parseSapDate(selectedRFQ.DeliveryDate) }}</p>
+          <p><strong>Description:</strong> {{ selectedRFQ.Description }}</p>
+          <p><strong>Material:</strong> {{ selectedRFQ.Material }}</p>
+          <p><strong>Quantity:</strong> {{ selectedRFQ.Quantity }} {{ selectedRFQ.Unit }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h4>Items</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of selectedRFQ.items">
+                <td>{{ item.code }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unit }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="detail-section">
+          <h4>Additional Information</h4>
+          <p><strong>Notes:</strong> {{ selectedRFQ.notes || 'No additional notes' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

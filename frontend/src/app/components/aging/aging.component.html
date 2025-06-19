@@ -1,0 +1,57 @@
+<div class="aging-container">
+  <button class="back-btn" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i>
+    Back
+  </button>
+  <div class="header">
+    <h2>Aging Analysis</h2>
+    <button (click)="loadAgingData()" [disabled]="loading">Refresh</button>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    Loading...
+  </div>
+
+  <div class="aging-content" *ngIf="!loading && !error && agingData">
+    <div class="aging-table-section">
+      <h2>Detailed Aging Analysis</h2>
+      <table class="aging-table" *ngIf="agingDataList.length > 0">
+        <thead>
+          <tr>
+            <th>Vendor ID</th>
+            <th>Doc Year</th>
+            <th>Currency</th>
+            <th>Amount Paid</th>
+            <th>Aging</th>
+            <th>Due Date</th>
+            <th>Entry Date</th>
+            <th>Payment Date</th>
+            <th>Payment Doc</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let aging of agingDataList">
+            <td>{{ aging.VendorId }}</td>
+            <td>{{ aging.DocYear }}</td>
+            <td>{{ aging.Currency }}</td>
+            <td>{{ aging.AmountPaid }}</td>
+            <td>{{ aging.Aging * -1 }}</td>
+            <td>{{ parseSapDate(aging.DueDate) }}</td>
+            <td>{{ parseSapDate(aging.EnrtyDate) }}</td>
+            <td>{{ parseSapDate(aging.PaymentDate) }}</td>
+            <td>{{ aging.PaymentDoc }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="agingDataList.length === 0 && !loading">
+        No aging data available.
+      </div>
+    </div>
+
+    
+  </div>
+</div> 

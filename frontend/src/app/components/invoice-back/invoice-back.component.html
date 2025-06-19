@@ -1,0 +1,57 @@
+<div class="invoice-back-container">
+  <div class="header">
+    <h1>Invoice Details</h1>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
+  <div class="invoice-details" *ngIf="!loading && !error && invoices">
+    <div class="details-section">
+      <h3>General Information</h3>
+      <div class="details-grid">
+        <div class="detail-item">
+          <label>Invoice Number:</label>
+          <span>{{ invoices.Belnr }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Material Number:</label>
+          <span>{{ invoices.Matnr }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Material Description:</label>
+          <span>{{ invoices.Maktx }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Quantity:</label>
+          <span>{{ invoices.Menge }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Base Unit:</label>
+          <span>{{ invoices.Bstme }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Amount:</label>
+          <span>{{ invoices.Waers }} {{ invoices.Wrbtr | number:'1.2-2' }}</span>
+        </div>
+        <div class="detail-item">
+          <label>Fiscal Year:</label>
+          <span>{{ invoices.Gjahr }}</span>
+        </div>
+      </div>
+      <button class="view-details-button" (click)="viewInvoiceDetails()" [disabled]="downloading">
+        <i class="fas" [ngClass]="downloading ? 'fa-spinner fa-spin' : 'fa-download'"></i>
+        {{ downloading ? 'Downloading...' : 'Download' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="no-data" *ngIf="!loading && !error && !invoices">
+    <p>No invoice details available.</p>
+  </div>
+</div>

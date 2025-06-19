@@ -1,0 +1,98 @@
+<div class="gr-container">
+  <button class="back-btn" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i>
+    Back
+  </button>
+  <div class="header">
+    <h1>Goods Receipts</h1>
+    <button class="refresh-button" (click)="loadGoodsReceipts()">
+      <i class="fas fa-sync-alt"></i>
+      Refresh
+    </button>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
+  <div class="gr-list" *ngIf="!loading && !error">
+    <div class="gr-card" *ngFor="let gr of goodsReceipts" (click)="viewGRDetails(gr)">
+      <div class="gr-header">
+        <h3>Material Doc #{{ gr.MaterialDoc }}</h3>
+      </div>
+      <div class="gr-details">
+        <p><strong>PO Number:</strong> {{ gr.PoNumber }}</p>
+        <p><strong>PO Item:</strong> {{ gr.PoItem }}</p>
+        <p><strong>Description:</strong> {{ gr.Description }}</p>
+        <p><strong>Material:</strong> {{ gr.Material }}</p>
+        <p><strong>Quantity:</strong> {{ gr.Quantity }} {{ gr.Unit }}</p>
+        <p><strong>Entry Date:</strong> {{ parseSapDate(gr.EntryDate) }}</p>
+        <p><strong>Post Date:</strong> {{ parseSapDate(gr.PostDate) }}</p>
+        <p><strong>Doc Year:</strong> {{ gr.DocYear }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" *ngIf="selectedGR">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Goods Receipt Details</h2>
+        <button class="close-button" (click)="closeGRDetails()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="section">
+          <h3>General Information</h3>
+          <div class="info-grid">
+            <p><strong>Material Doc:</strong> {{ selectedGR.MaterialDoc }}</p>
+            <p><strong>PO Number:</strong> {{ selectedGR.PoNumber }}</p>
+            <p><strong>PO Item:</strong> {{ selectedGR.PoItem }}</p>
+            <p><strong>Description:</strong> {{ selectedGR.Description }}</p>
+            <p><strong>Material:</strong> {{ selectedGR.Material }}</p>
+            <p><strong>Quantity:</strong> {{ selectedGR.Quantity }} {{ selectedGR.Unit }}</p>
+            <p><strong>Entry Date:</strong> {{ parseSapDate(selectedGR.EntryDate) }}</p>
+            <p><strong>Post Date:</strong> {{ parseSapDate(selectedGR.PostDate) }}</p>
+            <p><strong>Doc Year:</strong> {{ selectedGR.DocYear }}</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <h3>Items</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of selectedGR.items">
+                <td>{{ item.itemCode }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unit }}</td>
+                <td>{{ item.remarks }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h3>Additional Information</h3>
+          <div class="info-grid">
+            <p><strong>Delivery Note:</strong> {{ selectedGR.deliveryNote }}</p>
+            <p><strong>Remarks:</strong> {{ selectedGR.remarks }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

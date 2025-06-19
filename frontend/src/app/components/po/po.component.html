@@ -1,0 +1,90 @@
+<div class="po-container">
+  <button class="back-btn" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i>
+    Back
+  </button>
+  <div class="header">
+    <h2>Purchase Orders</h2>
+    <button (click)="loadPOs()" [disabled]="loading">Refresh</button>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    Loading...
+  </div>
+
+  <div class="po-list" *ngIf="!loading && !error">
+    <div class="po-card" *ngFor="let po of purchaseOrders" (click)="viewPODetails(po.RfqId)">
+      <div class="po-header">
+        <h3>PO #{{ po.RfqId }}</h3>
+        <span class="status" [ngClass]="po.status?.toLowerCase()">{{ po.status }}</span>
+      </div>
+      <div class="po-details">
+        <p><strong>Date:</strong> {{ parseSapDate(po.DocDate) }}</p>
+        <p><strong>Description:</strong> {{ po.Description }}</p>
+        <p><strong>Material:</strong> {{ po.Material }}</p>
+        <p><strong>Quantity:</strong> {{ po.Quantity }} {{ po.Unit }}</p>
+        <p><strong>Delivery Date:</strong> {{ parseSapDate(po.DeliveryDate) }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="po-detail-modal" *ngIf="selectedPO">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Purchase Order Details #{{ selectedPO.id }}</h3>
+        <button class="close-button" (click)="closePODetails()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-section">
+          <h4>General Information</h4>
+          <p><strong>Status:</strong> {{ selectedPO.status }}</p>
+          <p><strong>Date:</strong> {{ parseSapDate(selectedPO.DocDate) }}</p>
+          <p><strong>Delivery Date:</strong> {{ parseSapDate(selectedPO.DeliveryDate) }}</p>
+          <p><strong>Description:</strong> {{ selectedPO.Description }}</p>
+          <p><strong>Material:</strong> {{ selectedPO.Material }}</p>
+          <p><strong>Quantity:</strong> {{ selectedPO.Quantity }} {{ selectedPO.Unit }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h4>Items</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of selectedPO.items">
+                <td>{{ item.code }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unitPrice | currency }}</td>
+                <td>{{ item.total | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="detail-section">
+          <h4>Delivery Information</h4>
+          <p><strong>Delivery Address:</strong> {{ selectedPO.deliveryAddress }}</p>
+          <p><strong>Contact Person:</strong> {{ selectedPO.contactPerson }}</p>
+          <p><strong>Phone:</strong> {{ selectedPO.phone }}</p>
+        </div>
+
+        <div class="detail-section">
+          <h4>Additional Information</h4>
+          <p><strong>Notes:</strong> {{ selectedPO.notes || 'No additional notes' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

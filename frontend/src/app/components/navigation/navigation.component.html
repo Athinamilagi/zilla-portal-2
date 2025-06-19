@@ -1,0 +1,22 @@
+<nav class="navigation" >
+  <div class="nav-header">
+    <h1>Vendor Portal</h1>
+  </div>
+
+  <div class="nav-menu" *ngIf="userId">
+    <a *ngFor="let item of menuItems"
+       [routerLink]="item.path"
+       [class.active]="isActive(item.path)"
+       class="nav-item">
+      <i [class]="item.icon"></i>
+      <span>{{ item.label }}</span>
+    </a>
+  </div>
+
+  <div class="nav-footer" *ngIf="userId">
+    <button class="logout-button" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</nav> 

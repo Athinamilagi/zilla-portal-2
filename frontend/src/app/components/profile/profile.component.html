@@ -1,0 +1,35 @@
+<div class="profile-container">
+  <div class="header">
+    <h1>Profile</h1>
+    <button class="refresh-button" (click)="loadProfile()">
+      <i class="fas fa-sync-alt"></i>
+      Refresh
+    </button>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="success-message" *ngIf="success">
+    {{ success }}
+  </div>
+
+  <div class="loading-spinner" *ngIf="loading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+
+  <div class="profile-content" *ngIf="!loading && profile">
+    <table class="profile-table">
+      <tr><th>Vendor ID</th><td>{{ profile.Lifnr }}</td></tr>
+      <tr><th>Name</th><td>{{ profile.Name1 }}</td></tr>
+      <tr><th>Country</th><td>{{ profile.Land1 }}</td></tr>
+      <tr><th>City</th><td>{{ profile.Ort01 }}</td></tr>
+      <tr><th>Postal Code</th><td>{{ profile.Pstlz }}</td></tr>
+      <tr><th>Region</th><td>{{ profile.Regio }}</td></tr>
+      <tr><th>Short Name</th><td>{{ profile.Sortl }}</td></tr>
+      <tr><th>Address</th><td>{{ profile.Stras }}</td></tr>
+      <tr><th>Company Name</th><td>{{ profile.Mcod1 }}</td></tr>
+    </table>
+  </div>
+</div> 
